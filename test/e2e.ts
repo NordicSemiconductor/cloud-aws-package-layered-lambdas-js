@@ -1,6 +1,6 @@
 import { CloudFormationClient } from '@aws-sdk/client-cloudformation'
 import { InvokeCommand, LambdaClient } from '@aws-sdk/client-lambda'
-import { stackOutput } from '@bifravst/cloudformation-helpers'
+import { stackOutput } from '@nordicsemiconductor/cloudformation-helpers'
 import { strict as assert } from 'assert'
 import { TextDecoder } from 'util'
 
