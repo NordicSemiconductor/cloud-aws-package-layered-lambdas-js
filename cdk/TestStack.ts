@@ -33,14 +33,18 @@ export class TestStack extends CloudFormation.Stack {
 			},
 		)
 
+		const NodeJS14Runtime = new Lambda.Runtime(
+			'nodejs14.x',
+			Lambda.RuntimeFamily.NODEJS,
+			{
+				supportsInlineCode: false,
+			},
+		)
+
 		const baseLayer = new Lambda.LayerVersion(this, `${id}-layer`, {
 			code: Lambda.Code.bucket(sourceCodeBucket, baseLayerZipFileName),
 			// compatibleRuntimes: [Lambda.Runtime.NODEJS_14_X], // FIXME: use once CDK has support. See https://github.com/aws/aws-cdk/pull/12861
-			compatibleRuntimes: [
-				new Lambda.Runtime('nodejs14.x', Lambda.RuntimeFamily.NODEJS, {
-					supportsInlineCode: false,
-				}),
-			],
+			compatibleRuntimes: [NodeJS14Runtime],
 		})
 
 		const uuidLambda = new Lambda.Function(this, 'uuidLambda', {
@@ -52,9 +56,7 @@ export class TestStack extends CloudFormation.Stack {
 			description: 'Returns a v4 UUID',
 			handler: 'index.handler',
 			// runtime: Lambda.Runtime.NODEJS_14_X, // FIXME: use once CDK has support. See https://github.com/aws/aws-cdk/pull/12861
-			runtime: new Lambda.Runtime('nodejs14.x', Lambda.RuntimeFamily.NODEJS, {
-				supportsInlineCode: false,
-			}),
+			runtime: NodeJS14Runtime,
 			timeout: CloudFormation.Duration.seconds(15),
 			initialPolicy: [
 				new IAM.PolicyStatement({
