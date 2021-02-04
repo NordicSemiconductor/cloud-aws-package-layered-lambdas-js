@@ -53,7 +53,7 @@ export class TestStack extends CloudFormation.Stack {
 			handler: 'index.handler',
 			// runtime: Lambda.Runtime.NODEJS_14_X, // FIXME: use once CDK has support. See https://github.com/aws/aws-cdk/pull/12861
 			runtime: new Lambda.Runtime('nodejs14.x', Lambda.RuntimeFamily.NODEJS, {
-				supportsInlineCode: true,
+				supportsInlineCode: false,
 			}),
 			timeout: CloudFormation.Duration.seconds(15),
 			initialPolicy: [
