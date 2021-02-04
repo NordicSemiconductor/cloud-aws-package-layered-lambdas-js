@@ -22,6 +22,7 @@ so<{ uuidLambdaName: string }>(process.env.STACK_NAME ?? '')
 			const { statusCode, body } = JSON.parse(
 				new TextDecoder('utf-8').decode(Payload),
 			)
+			console.debug({ statusCode, body })
 			assert.equal(statusCode, 200, 'Status code should be 200')
 			assert.match(
 				body,
