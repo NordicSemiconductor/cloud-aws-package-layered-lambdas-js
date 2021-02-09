@@ -5,7 +5,7 @@
     "uuid": "8.1.0"
   },
   "devDependencies": {
-    "@types/aws-lambda": "^8.10.53",
+    "@types/aws-lambda": "8.10.53",
     "@types/uuid": "8.0.0"
   }
 }
