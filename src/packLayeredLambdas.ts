@@ -1,4 +1,4 @@
-import { packLambda, WebpackMode } from './packLambda'
+import { packLambda } from './packLambda'
 import { ProgressReporter, ConsoleProgressReporter } from './reporter'
 
 export type LayeredLambdas<A extends { [key: string]: string }> = {
@@ -10,7 +10,6 @@ export const packLayeredLambdas = async <
 	A extends { [key: string]: string }
 >(args: {
 	id: string
-	mode: WebpackMode
 	tsConfig: string
 	srcDir: string
 	outDir: string

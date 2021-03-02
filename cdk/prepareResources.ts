@@ -2,12 +2,7 @@ import * as path from 'path'
 import { promises as fs } from 'fs'
 import { getLambdaSourceCodeBucketName } from './getLambdaSourceCodeBucketName'
 import { TestStackLambdas } from './TestStack'
-import {
-	packBaseLayer,
-	packLayeredLambdas,
-	WebpackMode,
-	LayeredLambdas,
-} from '../src'
+import { packBaseLayer, packLayeredLambdas, LayeredLambdas } from '../src'
 import { spawn } from 'child_process'
 
 export const prepareResources = async ({
@@ -92,7 +87,6 @@ export const prepareResources = async ({
 	// Pack the lambda
 	const lambdas = await packLayeredLambdas<TestStackLambdas>({
 		id: 'test-lambdas',
-		mode: WebpackMode.production,
 		srcDir: rootDir,
 		outDir,
 		Bucket: sourceCodeBucketName,

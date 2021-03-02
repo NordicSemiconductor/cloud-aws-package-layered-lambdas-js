@@ -9,12 +9,6 @@ import { publishToS3 } from './publishToS3'
 import { hashDependencies } from './hashDependencies'
 import { ProgressReporter } from './reporter'
 
-export enum WebpackMode {
-	development = 'development',
-	production = 'production',
-	none = 'none',
-}
-
 /**
  * Packs the lambda and all of its inter-project dependencies using webpack and uploads it to S3
  */
@@ -119,7 +113,7 @@ export const packLambda = async (args: {
 		webpack(
 			{
 				entry: [src],
-				mode: WebpackMode.production,
+				mode: 'production',
 				target: 'node',
 				externals: [nodeExternals()], // ignore all modules in node_modules folder
 				module: {
