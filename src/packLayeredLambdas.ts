@@ -1,3 +1,4 @@
+import * as webpack from 'webpack'
 import { packLambda } from './packLambda'
 import { ProgressReporter, ConsoleProgressReporter } from './reporter'
 
@@ -17,6 +18,7 @@ export const packLayeredLambdas = async <
 	lambdas: A
 	ignoreFolders?: string[]
 	reporter?: ProgressReporter
+	webpackConfiguration?: webpack.Configuration
 }): Promise<LayeredLambdas<A>> => {
 	const r = args.reporter ?? ConsoleProgressReporter(args.id)
 	const packs = await Promise.all(
@@ -26,6 +28,7 @@ export const packLayeredLambdas = async <
 				name: lambda,
 				src: args.lambdas[lambda],
 				reporter: r,
+				webpackConfiguration: args.webpackConfiguration,
 			}),
 		),
 	)
