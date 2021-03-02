@@ -19,7 +19,6 @@ export enum WebpackMode {
  * Packs the lambda and all of its inter-project dependencies using webpack and uploads it to S3
  */
 export const packLambda = async (args: {
-	mode: WebpackMode
 	srcDir: string
 	outDir: string
 	Bucket: string
@@ -28,6 +27,7 @@ export const packLambda = async (args: {
 	tsConfig: string
 	reporter?: ProgressReporter
 	ignoreFolders?: string[]
+	webpackConfiguration?: webpack.Configuration
 }): Promise<{
 	name: string
 	zipFileName: string
@@ -37,7 +37,15 @@ export const packLambda = async (args: {
 		hashes: { [key: string]: string }
 	}
 }> => {
-	const { tsConfig, mode, outDir, Bucket, name, src, reporter } = args
+	const {
+		tsConfig,
+		outDir,
+		Bucket,
+		name,
+		src,
+		reporter,
+		webpackConfiguration,
+	} = args
 	const progress = reporter?.progress?.(name)
 	const success = reporter?.success?.(name)
 	const failure = reporter?.failure?.(name)
@@ -111,7 +119,7 @@ export const packLambda = async (args: {
 		webpack(
 			{
 				entry: [src],
-				mode,
+				mode: WebpackMode.production,
 				target: 'node',
 				externals: [nodeExternals()], // ignore all modules in node_modules folder
 				module: {
@@ -123,15 +131,17 @@ export const packLambda = async (args: {
 							options: {
 								configFile: tsConfig,
 								transpileOnly: true,
-								experimentalWatchApi: true,
 							},
 						},
+						...(webpackConfiguration?.module?.rules ?? []),
 					],
+					...webpackConfiguration?.module,
 				},
 				optimization: {
 					removeAvailableModules: false,
-					removeEmptyChunks: false,
 					splitChunks: false,
+					minimize: false,
+					...webpackConfiguration?.optimization,
 				},
 				resolve: {
 					extensions: ['.ts', '.ts', '.js'],
@@ -141,6 +151,7 @@ export const packLambda = async (args: {
 					libraryTarget: 'umd',
 					filename: jsFilenameWithHash,
 				},
+				...webpackConfiguration,
 			},
 			async (err, stats) => {
 				if (err !== null && err !== undefined) {
