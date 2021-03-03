@@ -99,6 +99,7 @@ export const packBaseLayer = async ({
 			'ci',
 			'--ignore-scripts',
 			'--only=prod',
+			'--legacy-peer-deps', // See https://github.com/aws/aws-sdk-js-v3/issues/2051
 		]
 		const p = spawn(cmd, args, {
 			cwd: installDir,
