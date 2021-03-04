@@ -100,7 +100,6 @@ export const packBaseLayer = async ({
 	}
 
 	await new Promise<void>((resolve, reject) => {
-		progress('Installing dependencies')
 		const [cmd, ...args] = installCommand ?? [
 			'npm',
 			hasLockFile ? 'ci' : 'i',
@@ -108,6 +107,7 @@ export const packBaseLayer = async ({
 			'--only=prod',
 			'--legacy-peer-deps', // See https://github.com/aws/aws-sdk-js-v3/issues/2051
 		]
+		progress(`Installing dependencies: ${[cmd, ...args].join(' ')}`)
 		const p = spawn(cmd, args, {
 			cwd: installDir,
 		})
