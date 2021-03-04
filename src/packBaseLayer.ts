@@ -44,6 +44,7 @@ export const packBaseLayer = async ({
 
 	const r = reporter ?? ConsoleProgressReporter('Base Layer')
 	const progress = r.progress(name)
+	const warn = r.warn(name)
 	const success = r.success(name)
 	const failure = r.failure(name)
 	const sizeInBytes = r.sizeInBytes(name)
@@ -86,17 +87,23 @@ export const packBaseLayer = async ({
 	const tempDir = dirSync({ unsafeCleanup: false }).name
 	const installDir = `${tempDir}${path.sep}nodejs`
 	fs.mkdirSync(installDir)
-	fs.copyFileSync(lockFile, `${installDir}${path.sep}package-lock.json`)
 	fs.copyFileSync(
 		path.resolve(srcDir, 'package.json'),
 		`${installDir}${path.sep}package.json`,
 	)
+	let hasLockFile = true
+	try {
+		fs.copyFileSync(lockFile, `${installDir}${path.sep}package-lock.json`)
+	} catch {
+		warn(`Failed to copy lockfile ${lockFile}.`)
+		hasLockFile = false
+	}
 
 	await new Promise<void>((resolve, reject) => {
 		progress('Installing dependencies')
 		const [cmd, ...args] = installCommand ?? [
 			'npm',
-			'ci',
+			hasLockFile ? 'ci' : 'i',
 			'--ignore-scripts',
 			'--only=prod',
 			'--legacy-peer-deps', // See https://github.com/aws/aws-sdk-js-v3/issues/2051

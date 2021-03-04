@@ -7,6 +7,7 @@ export type ProgressReporter = {
 	success: (id: string) => (message: string, ...info: string[]) => void
 	sizeInBytes: (id: string) => (size: number) => void
 	failure: (id: string) => (message: string, ...info: string[]) => void
+	warn: (id: string) => (message: string, ...info: string[]) => void
 }
 
 type Status = {
@@ -147,37 +148,24 @@ const onScreen = (title: string) => {
 			startTimes[id] = new Date()
 		}
 	}
+	const addStatusMessage = (status: Status['status']) => (id: string) => (
+		message: string,
+		...info: string[]
+	) => {
+		items[id] = {
+			status,
+			message,
+			info,
+			updated: new Date(),
+		}
+		start(id)
+		d(items, startTimes, sizesInBytes)
+	}
 	return {
-		progress: (id: string) => (message: string, ...info: string[]) => {
-			items[id] = {
-				status: 'progress',
-				message,
-				info,
-				updated: new Date(),
-			}
-			start(id)
-			d(items, startTimes, sizesInBytes)
-		},
-		success: (id: string) => (message: string, ...info: string[]) => {
-			items[id] = {
-				status: 'success',
-				message,
-				info,
-				updated: new Date(),
-			}
-			start(id)
-			d(items, startTimes, sizesInBytes)
-		},
-		failure: (id: string) => (message: string, ...info: string[]) => {
-			items[id] = {
-				status: 'failure',
-				message,
-				info,
-				updated: new Date(),
-			}
-			start(id)
-			d(items, startTimes, sizesInBytes)
-		},
+		progress: addStatusMessage('progress'),
+		warn: addStatusMessage('progress'),
+		success: addStatusMessage('success'),
+		failure: addStatusMessage('failure'),
 		sizeInBytes: (id: string) => (size: number) => {
 			sizesInBytes[id] = size
 			d(items, startTimes, sizesInBytes)
@@ -195,6 +183,7 @@ const log = (color: chalk.Chalk, brightColor: chalk.Chalk) => (id: string) => (
 const onCI = () => ({
 	progress: log(chalk.gray, chalk.gray),
 	success: log(chalk.green.dim, chalk.greenBright),
+	warn: log(chalk.yellow, chalk.yellowBright),
 	failure: log(chalk.red, chalk.redBright),
 	sizeInBytes: (id: string) => (size: number) =>
 		log(chalk.gray, chalk.gray)(id)(`Size: ${Math.round(size / 1024)}KB`),
