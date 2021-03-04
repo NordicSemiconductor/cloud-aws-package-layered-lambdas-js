@@ -3,7 +3,6 @@ import { promises as fs } from 'fs'
 import { getLambdaSourceCodeBucketName } from './getLambdaSourceCodeBucketName'
 import { TestStackLambdas } from './TestStack'
 import { packBaseLayer, packLayeredLambdas, LayeredLambdas } from '../src'
-import { spawn } from 'child_process'
 
 export const prepareResources = async ({
 	stackName,
@@ -65,19 +64,6 @@ export const prepareResources = async ({
 		}),
 		'utf-8',
 	)
-	// - install them
-	await new Promise<void>((resolve, reject) => {
-		const p = spawn('npm', ['i', '--ignore-scripts', '--only=prod'], {
-			cwd: layerFolder,
-		})
-		p.on('close', (code) => {
-			if (code !== 0) {
-				const msg = `[CloudFormation Layer] npm i in ${layerFolder} exited with code ${code}.`
-				return reject(new Error(msg))
-			}
-			return resolve()
-		})
-	})
 	const baseLayerZipFileName = await packBaseLayer({
 		srcDir: layerFolder,
 		outDir,
