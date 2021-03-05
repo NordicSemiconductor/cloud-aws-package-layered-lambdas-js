@@ -35,19 +35,34 @@ export const packBaseLayer = async ({
 	 */
 	installCommand?: string[]
 }): Promise<string> => {
-	const lockFile = path.resolve(srcDir, lockFileName ?? 'package-lock.json')
-	const hash = (await checkSumOfFiles([lockFile])).checksum
-
 	const name = layerName ?? 'base-layer'
-	const zipFilenameWithHash = `${layerName ?? 'base-layer'}-${hash}.zip`
-	const localPath = path.resolve(outDir, zipFilenameWithHash)
-
 	const r = reporter ?? ConsoleProgressReporter('Base Layer')
 	const progress = r.progress(name)
 	const warn = r.warn(name)
 	const success = r.success(name)
 	const failure = r.failure(name)
 	const sizeInBytes = r.sizeInBytes(name)
+
+	const packageJson = path.resolve(srcDir, 'package.json')
+	try {
+		fs.statSync(packageJson)
+	} catch {
+		throw new Error(`package.json not found in ${packageJson}`)
+	}
+	const lockFile = path.resolve(srcDir, lockFileName ?? 'package-lock.json')
+	const hashFiles = [packageJson]
+	let hasLockFile = true
+	try {
+		fs.statSync(lockFile)
+		hashFiles.push(lockFile)
+	} catch {
+		hasLockFile = false
+		warn(`lockfile ${lockFile} does not exist.`)
+	}
+	const hash = (await checkSumOfFiles(hashFiles)).checksum
+
+	const zipFilenameWithHash = `${layerName ?? 'base-layer'}-${hash}.zip`
+	const localPath = path.resolve(outDir, zipFilenameWithHash)
 
 	// Check if it already has been built and published
 	progress('Checking S3 cache')
@@ -87,17 +102,9 @@ export const packBaseLayer = async ({
 	const tempDir = dirSync({ unsafeCleanup: false }).name
 	const installDir = `${tempDir}${path.sep}nodejs`
 	fs.mkdirSync(installDir)
-	fs.copyFileSync(
-		path.resolve(srcDir, 'package.json'),
-		`${installDir}${path.sep}package.json`,
-	)
-	let hasLockFile = true
-	try {
+	fs.copyFileSync(packageJson, `${installDir}${path.sep}package.json`)
+	if (hasLockFile)
 		fs.copyFileSync(lockFile, `${installDir}${path.sep}package-lock.json`)
-	} catch {
-		warn(`Failed to copy lockfile ${lockFile}.`)
-		hasLockFile = false
-	}
 
 	await new Promise<void>((resolve, reject) => {
 		const [cmd, ...args] = installCommand ?? [
