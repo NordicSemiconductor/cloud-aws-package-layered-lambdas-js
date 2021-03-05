@@ -102,70 +102,8 @@ export const packBaseLayer = async ({
 	fs.mkdirSync(installDir)
 	fs.copyFileSync(packageJson, `${installDir}${path.sep}package.json`)
 
-	/**
-	 * Creates a package-lock.json which only contains the package data for the
-	 * dependencies, and not the devDependencies.
-	 *
-	 * devDependencies should anyway not be contained in the lambda layers,
-	 * but we want to use the package information from the lockfile, when creating
-	 * the lambda layer.
-	 *
-	 * This reduces the size of node_modules significantly:
-	 *
-	 *
-	 * 	npm i --no-audit --ignore-scripts --only=prod --legacy-peer-deps
-	 *     du -h
-	 *     # 380M    .
-	 *
-	 * With a lockfile that only has the dependencies:
-	 *
-	 * 	npm ci --no-audit --ignore-scripts --only=prod --legacy-peer-deps
-	 *     du -h
-	 *     # 160M    .
-	 */
-	if (actualLockFileName === 'package-lock.json') {
-		const { name, version, lockfileVersion, packages } = JSON.parse(
-			fs.readFileSync(lockFile, {
-				encoding: 'utf-8',
-			}),
-		)
-		if (lockfileVersion === 2) {
-			progress('Creating package-lock.json with only production packages')
-			const { dependencies } = JSON.parse(
-				fs.readFileSync(packageJson, {
-					encoding: 'utf-8',
-				}),
-			)
-			fs.writeFileSync(
-				lockFileTarget,
-				JSON.stringify(
-					{
-						name,
-						version,
-						lockfileVersion,
-						packages: Object.keys(dependencies).reduce(
-							(onlyDependencyPackages, dep) => ({
-								...onlyDependencyPackages,
-								[`node_modules/${dep}`]: packages[`node_modules/${dep}`],
-							}),
-							{} as Record<string, string>,
-						),
-					},
-					null,
-					2,
-				),
-				{
-					encoding: 'utf-8',
-				},
-			)
-		}
-	}
-	try {
-		fs.statSync(lockFileTarget)
-	} catch {
-		progress('Using original package-lock.json')
-		fs.copyFileSync(lockFile, lockFileTarget)
-	}
+	progress('Copying the lockfile')
+	fs.copyFileSync(lockFile, lockFileTarget)
 
 	await new Promise<void>((resolve, reject) => {
 		const [cmd, ...args] = installCommand ?? [
