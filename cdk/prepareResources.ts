@@ -29,12 +29,7 @@ export const prepareResources = async ({
 	// Pack the baselayer, only with needed dependencies
 
 	// - This will contain the package.json to be used for the layer
-	const layerFolder = path.resolve(
-		rootDir,
-		'dist',
-		'lambdas',
-		'cloudFormationLayer',
-	)
+	const layerFolder = path.resolve(rootDir, 'dist', 'lambdas', 'layer')
 	try {
 		await fs.stat(layerFolder)
 	} catch (_) {
@@ -46,13 +41,15 @@ export const prepareResources = async ({
 	const { dependencies } = JSON.parse(
 		await fs.readFile(path.resolve(rootDir, 'package.json'), 'utf-8'),
 	)
-	const cdkLambdaDeps = {
-		'@aws-sdk/client-s3': dependencies['@aws-sdk/client-s3'],
+	const lambdaDependencies = {
+		uuid: dependencies['uuid'],
 	}
-	if (Object.values(cdkLambdaDeps).find((v) => v === undefined) !== undefined) {
+	if (
+		Object.values(lambdaDependencies).find((v) => v === undefined) !== undefined
+	) {
 		throw new Error(
 			`Could not resolve all dependencies in "${JSON.stringify(
-				cdkLambdaDeps,
+				lambdaDependencies,
 			)}"`!,
 		)
 	}
@@ -60,7 +57,7 @@ export const prepareResources = async ({
 	await fs.writeFile(
 		path.join(layerFolder, 'package.json'),
 		JSON.stringify({
-			dependencies: cdkLambdaDeps,
+			dependencies: lambdaDependencies,
 		}),
 		'utf-8',
 	)
