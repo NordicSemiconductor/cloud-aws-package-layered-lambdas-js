@@ -64,6 +64,11 @@ export const prepareResources = async ({
 		}),
 		'utf-8',
 	)
+	// - copy the existing lockfile to re-use
+	await fs.copyFile(
+		path.resolve(rootDir, 'package-lock.json'),
+		path.join(layerFolder, 'package-lock.json'),
+	)
 	const baseLayerZipFileName = await packBaseLayer({
 		srcDir: layerFolder,
 		outDir,

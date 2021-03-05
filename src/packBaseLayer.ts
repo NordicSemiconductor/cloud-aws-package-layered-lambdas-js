@@ -38,28 +38,25 @@ export const packBaseLayer = async ({
 	const name = layerName ?? 'base-layer'
 	const r = reporter ?? ConsoleProgressReporter('Base Layer')
 	const progress = r.progress(name)
-	const warn = r.warn(name)
 	const success = r.success(name)
 	const failure = r.failure(name)
 	const sizeInBytes = r.sizeInBytes(name)
 
 	const packageJson = path.resolve(srcDir, 'package.json')
+	const actualLockFileName = lockFileName ?? 'package-lock.json'
 	try {
 		fs.statSync(packageJson)
 	} catch {
 		throw new Error(`package.json not found in ${packageJson}`)
 	}
-	const lockFile = path.resolve(srcDir, lockFileName ?? 'package-lock.json')
-	const hashFiles = [packageJson]
-	let hasLockFile = true
+	const lockFile = path.resolve(srcDir, actualLockFileName)
 	try {
 		fs.statSync(lockFile)
-		hashFiles.push(lockFile)
 	} catch {
-		hasLockFile = false
-		warn(`lockfile ${lockFile} does not exist.`)
+		throw new Error(`Lockfile not found in ${lockFile}`)
 	}
-	const hash = (await checkSumOfFiles(hashFiles)).checksum
+	const hash = (await checkSumOfFiles([packageJson, actualLockFileName]))
+		.checksum
 
 	const zipFilenameWithHash = `${layerName ?? 'base-layer'}-${hash}.zip`
 	const localPath = path.resolve(outDir, zipFilenameWithHash)
@@ -101,15 +98,79 @@ export const packBaseLayer = async ({
 
 	const tempDir = dirSync({ unsafeCleanup: false }).name
 	const installDir = `${tempDir}${path.sep}nodejs`
+	const lockFileTarget = `${installDir}${path.sep}${actualLockFileName}`
 	fs.mkdirSync(installDir)
 	fs.copyFileSync(packageJson, `${installDir}${path.sep}package.json`)
-	if (hasLockFile)
-		fs.copyFileSync(lockFile, `${installDir}${path.sep}package-lock.json`)
+
+	/**
+	 * Creates a package-lock.json which only contains the package data for the
+	 * dependencies, and not the devDependencies.
+	 *
+	 * devDependencies should anyway not be contained in the lambda layers,
+	 * but we want to use the package information from the lockfile, when creating
+	 * the lambda layer.
+	 *
+	 * This reduces the size of node_modules significantly:
+	 *
+	 *
+	 * 	npm i --no-audit --ignore-scripts --only=prod --legacy-peer-deps
+	 *     du -h
+	 *     # 380M    .
+	 *
+	 * With a lockfile that only has the dependencies:
+	 *
+	 * 	npm ci --no-audit --ignore-scripts --only=prod --legacy-peer-deps
+	 *     du -h
+	 *     # 160M    .
+	 */
+	if (actualLockFileName === 'package-lock.json') {
+		const { name, version, lockfileVersion, packages } = JSON.parse(
+			fs.readFileSync(lockFile, {
+				encoding: 'utf-8',
+			}),
+		)
+		if (lockfileVersion === 2) {
+			progress('Creating package-lock.json with only production packages')
+			const { dependencies } = JSON.parse(
+				fs.readFileSync(packageJson, {
+					encoding: 'utf-8',
+				}),
+			)
+			fs.writeFileSync(
+				lockFileTarget,
+				JSON.stringify(
+					{
+						name,
+						version,
+						lockfileVersion,
+						packages: Object.keys(dependencies).reduce(
+							(onlyDependencyPackages, dep) => ({
+								...onlyDependencyPackages,
+								[`node_modules/${dep}`]: packages[`node_modules/${dep}`],
+							}),
+							{} as Record<string, string>,
+						),
+					},
+					null,
+					2,
+				),
+				{
+					encoding: 'utf-8',
+				},
+			)
+		}
+	}
+	try {
+		fs.statSync(lockFileTarget)
+	} catch {
+		progress('Using original package-lock.json')
+		fs.copyFileSync(lockFile, lockFileTarget)
+	}
 
 	await new Promise<void>((resolve, reject) => {
 		const [cmd, ...args] = installCommand ?? [
 			'npm',
-			hasLockFile ? 'ci' : 'i',
+			'ci',
 			'--ignore-scripts',
 			'--only=prod',
 			'--legacy-peer-deps', // See https://github.com/aws/aws-sdk-js-v3/issues/2051
