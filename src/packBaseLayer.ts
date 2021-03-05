@@ -111,6 +111,7 @@ export const packBaseLayer = async ({
 			'ci',
 			'--ignore-scripts',
 			'--only=prod',
+			'--no-audit',
 			'--legacy-peer-deps', // See https://github.com/aws/aws-sdk-js-v3/issues/2051
 		]
 		progress(`Installing dependencies: ${[cmd, ...args].join(' ')}`)
