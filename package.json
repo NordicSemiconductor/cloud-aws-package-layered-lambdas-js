@@ -11,8 +11,6 @@
   "scripts": {
     "test": "node --unhandled-rejections=strict dist/test/e2e.js",
     "lint": "eslint --ext .js,.ts src/**",
-    "snyk-protect": "snyk protect",
-    "prepare": "npm run snyk-protect",
     "postinstall": "husky install",
     "prepublishOnly": "pinst --disable",
     "postpublish": "pinst --enable"
@@ -37,7 +35,6 @@
     "chalk": "4.1.0",
     "dependency-tree": "8.0.0",
     "glob": "7.1.6",
-    "snyk": "1.483.0",
     "table": "6.0.7",
     "tmp": "0.2.1",
     "ts-loader": "8.0.18",
@@ -105,6 +102,5 @@
     "*.{md,json,yaml,yml,js}": [
       "prettier --write"
     ]
-  },
-  "snyk": true
+  }
 }
