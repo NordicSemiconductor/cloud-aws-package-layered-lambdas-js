@@ -50,9 +50,7 @@ jobs:
       - name: Run tests
         run: npm test
       - name: Semantic release
-        run: |
-          npm i --no-save semantic-release
-          npx semantic-release
+        run: npx semantic-release
       - name: Clean up test resources
         if: always()
         run: |
