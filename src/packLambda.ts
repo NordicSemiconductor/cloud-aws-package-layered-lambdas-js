@@ -3,7 +3,6 @@ import * as webpack from 'webpack'
 import * as path from 'path'
 import * as fs from 'fs'
 import * as yazl from 'yazl'
-import * as nodeExternals from 'webpack-node-externals'
 import { existsOnS3 } from './existsOnS3'
 import { publishToS3 } from './publishToS3'
 import { hashDependencies } from './hashDependencies'
@@ -61,7 +60,7 @@ export const packLambda = async (args: {
 	})
 	const { checksum: hash, hashes } = deps
 	const jsFilenameWithHash = `${name}-${hash}.js`
-	const zipFilenameWithHash = `${name}-${hash}-layered.zip`
+	const zipFilenameWithHash = `${name}-${hash}-113ed.zip`
 	const localPath = path.resolve(outDir, zipFilenameWithHash)
 
 	// Check if it already has been built and published
@@ -115,7 +114,12 @@ export const packLambda = async (args: {
 				entry: [src],
 				mode: 'production',
 				target: 'node',
-				externals: [nodeExternals()], // ignore all modules in node_modules folder
+				externals: [
+					// ignore all modules in node_modules folder
+					// Every non-relative module is external
+					// abc -> require("abc")
+					/^[a-z\-0-9]+$/,
+				],
 				module: {
 					rules: [
 						{
