@@ -54,19 +54,19 @@ export const checkSumOfFiles = async (
 	files: string[]
 }> => {
 	const fileChecksums = await checkSum(filesOrPatterns)
-
-	// Calculate hash of hashes
-	const hash = crypto.createHash('sha1')
-	hash.update(
-		[...Object.entries(fileChecksums)]
-			.map(([, hash]) => hash)
-			.reduce((allHashes, hash) => `${allHashes}${hash}`, ''),
-	)
 	return {
-		checksum: hash.digest('hex'),
+		checksum: checkSumOfStrings(
+			[...Object.entries(fileChecksums)].map(([, hash]) => hash),
+		),
 		hashes: {
 			...fileChecksums,
 		},
 		files: Object.keys(fileChecksums),
 	}
+}
+
+export const checkSumOfStrings = (strings: string[]): string => {
+	const hash = crypto.createHash('sha1')
+	hash.update(strings.join(''))
+	return hash.digest('hex')
 }

@@ -1,7 +1,7 @@
 import * as path from 'path'
 import * as fs from 'fs'
 import * as yazl from 'yazl'
-import { checkSumOfFiles } from './checkSum'
+import { checkSumOfFiles, checkSumOfStrings } from './checkSum'
 import * as glob from 'glob'
 import { spawn } from 'child_process'
 import { dirSync } from 'tmp'
@@ -41,6 +41,13 @@ export const packBaseLayer = async ({
 	const success = r.success(name)
 	const failure = r.failure(name)
 	const sizeInBytes = r.sizeInBytes(name)
+	const npmicmd = installCommand ?? [
+		'npm',
+		'ci',
+		'--ignore-scripts',
+		'--only=prod',
+		'--no-audit',
+	]
 
 	const packageJson = path.resolve(srcDir, 'package.json')
 	const actualLockFileName = lockFileName ?? 'package-lock.json'
@@ -55,9 +62,10 @@ export const packBaseLayer = async ({
 	} catch {
 		throw new Error(`Lockfile not found in ${lockFile}`)
 	}
-	const hash = (await checkSumOfFiles([packageJson, actualLockFileName]))
-		.checksum
-
+	const hash = checkSumOfStrings([
+		(await checkSumOfFiles([packageJson, actualLockFileName])).checksum,
+		npmicmd.join(' '),
+	])
 	const zipFilenameWithHash = `${layerName ?? 'base-layer'}-${hash}.zip`
 	const localPath = path.resolve(outDir, zipFilenameWithHash)
 
@@ -106,14 +114,7 @@ export const packBaseLayer = async ({
 	fs.copyFileSync(lockFile, lockFileTarget)
 
 	await new Promise<void>((resolve, reject) => {
-		const [cmd, ...args] = installCommand ?? [
-			'npm',
-			'ci',
-			'--ignore-scripts',
-			'--only=prod',
-			'--no-audit',
-			'--legacy-peer-deps', // See https://github.com/aws/aws-sdk-js-v3/issues/2051
-		]
+		const [cmd, ...args] = npmicmd
 		progress(`Installing dependencies: ${[cmd, ...args].join(' ')}`)
 		const p = spawn(cmd, args, {
 			cwd: installDir,
