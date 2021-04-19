@@ -9,7 +9,7 @@ import { ProgressReporter } from './reporter.js'
 import { build, BuildOptions } from 'esbuild'
 
 /**
- * Packs the lambda and all of its inter-project dependencies using webpack and uploads it to S3
+ * Packs the lambda and all of its inter-project dependencies using esbuild and uploads it to S3
  */
 export const packLambda = async (args: {
 	srcDir: string
