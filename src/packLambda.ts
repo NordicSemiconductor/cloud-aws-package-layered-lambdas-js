@@ -7,6 +7,7 @@ import { publishToS3 } from './publishToS3.js'
 import { hashDependencies } from './hashDependencies.js'
 import { ProgressReporter } from './reporter.js'
 import { build, BuildOptions } from 'esbuild'
+import { checkSumOfStrings } from './checkSum.js'
 
 /**
  * Packs the lambda and all of its inter-project dependencies using esbuild and uploads it to S3
@@ -17,7 +18,6 @@ export const packLambda = async (args: {
 	Bucket: string
 	name: string
 	src: string
-	tsConfig: string
 	reporter?: ProgressReporter
 	ignoreFolders?: string[]
 	esbuildOptions?: BuildOptions
@@ -36,6 +36,31 @@ export const packLambda = async (args: {
 	const failure = reporter?.failure?.(name)
 	const sizeInBytes = reporter?.sizeInBytes?.(name)
 
+	const buildOpts: BuildOptions = {
+		entryPoints: [src],
+		bundle: true,
+		format: 'cjs',
+		platform: 'node',
+		plugins: [
+			{
+				name: 'exclude-node_modules',
+				setup: (build) => {
+					build.onResolve({ filter: /./ }, (args) => {
+						const absolutePath = path.join(args.resolveDir, args.path)
+						if (absolutePath.includes('/node_modules/')) {
+							return {
+								path: args.resolveDir.replace(/.+\/node_modules\//, ''),
+								external: true,
+							}
+						}
+						return undefined
+					})
+				},
+			},
+		],
+		...esbuildOptions,
+	}
+
 	try {
 		fs.statSync(src)
 	} catch (e) {
@@ -50,7 +75,8 @@ export const packLambda = async (args: {
 		...args,
 		name,
 	})
-	const { checksum: hash, hashes } = deps
+	const { checksum: depsChecksum, hashes } = deps
+	const hash = checkSumOfStrings([depsChecksum, JSON.stringify(buildOpts)])
 	const jsFilenameWithHash = `${name}-${hash}.js`
 	const zipFilenameWithHash = `${name}-${hash}-113ed.zip`
 	const localPath = path.resolve(outDir, zipFilenameWithHash)
@@ -102,26 +128,8 @@ export const packLambda = async (args: {
 	progress?.('Packing')
 	const f = path.resolve(outDir, jsFilenameWithHash)
 	await build({
-		entryPoints: [src],
+		...buildOpts,
 		outfile: f,
-		bundle: true,
-		format: 'esm',
-		platform: 'node',
-		plugins: [
-			{
-				name: 'exclude-node_modules',
-				setup: (build) => {
-					build.onResolve({ filter: /./ }, (args) => {
-						const absolutePath = path.join(args.resolveDir, args.path)
-						if (absolutePath.includes('/node_modules/')) {
-							return { path: args.path, external: true }
-						}
-						return undefined
-					})
-				},
-			},
-		],
-		...esbuildOptions,
 	})
 
 	await new Promise<void>((resolve, reject) => {
