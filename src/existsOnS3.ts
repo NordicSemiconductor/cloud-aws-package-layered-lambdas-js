@@ -1,4 +1,4 @@
-import * as path from 'path'
+import path from 'path'
 import { promises as fs } from 'fs'
 import { HeadObjectCommand, S3Client } from '@aws-sdk/client-s3'
 

@@ -2,7 +2,7 @@ import {
 	CloudFormationClient,
 	DescribeStacksCommand,
 } from '@aws-sdk/client-cloudformation'
-import { LambdaSourceCodeStorageStack } from './LambdaSourceCodeStorageStack'
+import { LambdaSourceCodeStorageStack } from './LambdaSourceCodeStorageStack.js'
 
 const cf = new CloudFormationClient({})
 
