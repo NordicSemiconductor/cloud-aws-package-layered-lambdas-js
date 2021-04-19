@@ -1,7 +1,7 @@
-import { checkSumOfFiles } from './checkSum'
-import * as path from 'path'
+import { checkSumOfFiles } from './checkSum.js'
+import path from 'path'
 import { promises as fs, unlinkSync } from 'fs'
-import * as dependencyTree from 'dependency-tree'
+import dependencyTree from 'dependency-tree'
 
 /**
  * Hashes the dependencies of a lambda

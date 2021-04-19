@@ -1,6 +1,6 @@
-import * as webpack from 'webpack'
-import { packLambda } from './packLambda'
-import { ProgressReporter, ConsoleProgressReporter } from './reporter'
+import webpack from 'webpack'
+import { packLambda } from './packLambda.js'
+import { ProgressReporter, ConsoleProgressReporter } from './reporter.js'
 
 export type LayeredLambdas<A extends { [key: string]: string }> = {
 	id: string

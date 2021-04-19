@@ -1,4 +1,4 @@
-import * as chalk from 'chalk'
+import chalk from 'chalk'
 import ansiEscapes from 'ansi-escapes'
 import { table } from 'table'
 
