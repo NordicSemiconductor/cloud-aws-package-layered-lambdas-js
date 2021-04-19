@@ -1,12 +1,12 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
-import { v4 } from 'uuid'
+import { id } from './lib.js'
 
 export const handler = async (
 	event: APIGatewayProxyEvent,
 ): Promise<APIGatewayProxyResult> => {
 	console.log(JSON.stringify(event))
 	return {
-		body: v4(),
+		body: id(),
 		statusCode: 200,
 	}
 }
