@@ -2,9 +2,8 @@
   "name": "@nordicsemiconductor/package-layered-lambdas",
   "version": "0.0.0-development",
   "description": "Packages lambda functions and layers for AWS lambda",
-  "exports": "./dist/src/index.js",
-  "typings": "./dist/src/index.d.ts",
-  "type": "module",
+  "main": "dist/src/index.js",
+  "typings": "dist/src/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/NordicSemiconductor/cloud-aws-package-layered-lambdas-js.git"
@@ -33,15 +32,16 @@
     "@aws-sdk/client-s3": "3.13.0",
     "@typescript-eslint/eslint-plugin": "4.22.0",
     "@typescript-eslint/parser": "4.22.0",
-    "ansi-escapes": "5.0.0",
+    "ansi-escapes": "4.3.2",
     "aws-lambda": "1.0.6",
     "chalk": "4.1.0",
     "dependency-tree": "8.1.0",
-    "esbuild": "0.11.12",
     "glob": "7.1.6",
-    "table": "6.2.0",
+    "table": "6.3.0",
     "tmp": "0.2.1",
+    "ts-loader": "9.0.0",
     "uuid": "8.3.2",
+    "webpack": "5.34.0",
     "yazl": "2.5.1"
   },
   "devDependencies": {
@@ -61,6 +61,7 @@
     "@types/terminal-kit": "1.28.2",
     "@types/tmp": "0.2.0",
     "@types/uuid": "8.3.0",
+    "@types/webpack": "5.28.0",
     "@types/yazl": "2.4.2",
     "cdk": "1.99.0",
     "eslint": "7.24.0",
@@ -101,6 +102,5 @@
     "*.{md,json,yaml,yml,js}": [
       "prettier --write"
     ]
-  },
-  "prettier": "@nordicsemiconductor/asset-tracker-cloud-code-style/.prettierrc"
+  }
 }

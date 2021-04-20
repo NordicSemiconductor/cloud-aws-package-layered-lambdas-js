@@ -1,13 +1,13 @@
-import path from 'path'
-import fs from 'fs'
-import yazl from 'yazl'
-import { checkSumOfFiles, checkSumOfStrings } from './checkSum.js'
-import glob from 'glob'
+import * as path from 'path'
+import * as fs from 'fs'
+import * as yazl from 'yazl'
+import { checkSumOfFiles, checkSumOfStrings } from './checkSum'
+import * as glob from 'glob'
 import { spawn } from 'child_process'
 import { dirSync } from 'tmp'
-import { existsOnS3 } from './existsOnS3.js'
-import { publishToS3 } from './publishToS3.js'
-import { ProgressReporter, ConsoleProgressReporter } from './reporter.js'
+import { existsOnS3 } from './existsOnS3'
+import { publishToS3 } from './publishToS3'
+import { ProgressReporter, ConsoleProgressReporter } from './reporter'
 
 /**
  * Packs a base layer for use with the lambdas with all the dependencies and uploads it to S3
