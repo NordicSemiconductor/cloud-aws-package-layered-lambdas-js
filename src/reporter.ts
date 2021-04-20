@@ -107,7 +107,7 @@ const tableWriter = (title: string) => {
 							alignment: 'left',
 						},
 					},
-					drawHorizontalLine: (index, size) => {
+					drawHorizontalLine: (index: number, size: number) => {
 						return (
 							index === 0 || index === 1 || index === size - 1 || index === size
 						)
