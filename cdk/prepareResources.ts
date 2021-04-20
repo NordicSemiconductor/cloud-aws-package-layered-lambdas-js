@@ -85,7 +85,6 @@ export const prepareResources = async ({
 		lambdas: {
 			uuid: path.resolve(rootDir, 'test', 'uuidLambda.ts'),
 		},
-		tsConfig: path.resolve(rootDir, 'tsconfig.json'),
 	})
 
 	return {

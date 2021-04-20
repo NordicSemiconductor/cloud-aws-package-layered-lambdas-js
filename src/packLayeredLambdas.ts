@@ -11,7 +11,6 @@ export const packLayeredLambdas = async <
 	A extends { [key: string]: string }
 >(args: {
 	id: string
-	tsConfig: string
 	srcDir: string
 	outDir: string
 	Bucket: string
