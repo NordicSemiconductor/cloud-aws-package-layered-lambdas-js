@@ -41,6 +41,7 @@ export const packLambda = async (args: {
 		bundle: true,
 		format: 'cjs',
 		platform: 'node',
+		mainFields: ['module', 'main'],
 		plugins: [
 			{
 				name: 'exclude-node_modules',
