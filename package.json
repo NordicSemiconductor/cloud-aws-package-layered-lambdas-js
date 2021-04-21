@@ -34,7 +34,7 @@
     "@typescript-eslint/parser": "4.22.0",
     "ansi-escapes": "4.3.2",
     "aws-lambda": "1.0.6",
-    "chalk": "4.1.0",
+    "chalk": "4.1.1",
     "dependency-tree": "8.1.0",
     "glob": "7.1.6",
     "table": "6.3.2",
