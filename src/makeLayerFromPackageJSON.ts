@@ -30,7 +30,7 @@ export const makeLayerFromPackageJSON = async ({
 	 */
 	installCommand?: string[]
 }): Promise<string> => {
-	const { dependencies } = JSON.parse(
+	const { dependencies, devDependencies } = JSON.parse(
 		await fs.readFile(packageJsonFile, 'utf-8'),
 	)
 
@@ -43,14 +43,15 @@ export const makeLayerFromPackageJSON = async ({
 	}
 
 	const deps = requiredDependencies.reduce((resolved, dep) => {
-		if (dependencies[dep] === undefined)
+		const resolvedDependency = dependencies[dep] ?? devDependencies[dep]
+		if (resolvedDependency === undefined)
 			throw new Error(
 				`Could not resolve dependency "${dep}" in ${packageJsonFile}`!,
 			)
-		reporter.progress(layerName)(`${dep}: ${dependencies[dep]}`)
+		reporter.progress(layerName)(`${dep}: ${resolvedDependency}`)
 		return {
 			...resolved,
-			[dep]: dependencies[dep],
+			[dep]: resolvedDependency,
 		}
 	}, {} as Record<string, string>)
 
