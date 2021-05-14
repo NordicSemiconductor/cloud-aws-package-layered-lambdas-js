@@ -27,9 +27,9 @@
   },
   "homepage": "https://github.com/NordicSemiconductor/cloud-aws-package-layered-lambdas-js#readme",
   "dependencies": {
-    "@aws-sdk/client-cloudformation": "3.15.0",
-    "@aws-sdk/client-lambda": "3.15.0",
-    "@aws-sdk/client-s3": "3.15.0",
+    "@aws-sdk/client-cloudformation": "3.16.0",
+    "@aws-sdk/client-lambda": "3.16.0",
+    "@aws-sdk/client-s3": "3.16.0",
     "@typescript-eslint/eslint-plugin": "4.23.0",
     "@typescript-eslint/parser": "4.23.0",
     "ansi-escapes": "4.3.2",
