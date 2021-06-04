@@ -64,7 +64,7 @@
     "@types/webpack": "5.28.0",
     "@types/yazl": "2.4.2",
     "cdk": "1.107.0",
-    "eslint": "7.27.0",
+    "eslint": "7.28.0",
     "husky": "6.0.0",
     "lint-staged": "11.0.0",
     "pinst": "2.1.6",
