@@ -45,9 +45,9 @@
     "yazl": "2.5.1"
   },
   "devDependencies": {
-    "@aws-cdk/aws-lambda": "1.113.0",
-    "@aws-cdk/aws-s3": "1.113.0",
-    "@aws-cdk/core": "1.113.0",
+    "@aws-cdk/aws-lambda": "1.114.0",
+    "@aws-cdk/aws-s3": "1.114.0",
+    "@aws-cdk/core": "1.114.0",
     "@commitlint/cli": "12.1.4",
     "@commitlint/config-angular": "12.1.4",
     "@nordicsemiconductor/asset-tracker-cloud-code-style": "9.0.4",
