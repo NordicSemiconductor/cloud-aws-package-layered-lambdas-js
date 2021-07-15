@@ -53,7 +53,7 @@
     "@nordicsemiconductor/asset-tracker-cloud-code-style": "9.0.4",
     "@nordicsemiconductor/cloudformation-helpers": "6.0.30",
     "@nordicsemiconductor/eslint-config-asset-tracker-cloud-typescript": "8.0.2",
-    "@types/aws-lambda": "8.10.78",
+    "@types/aws-lambda": "8.10.79",
     "@types/dependency-tree": "8.1.1",
     "@types/glob": "7.1.4",
     "@types/node": "16.0.0",
