@@ -52,7 +52,7 @@
     "@commitlint/config-angular": "13.1.0",
     "@nordicsemiconductor/asset-tracker-cloud-code-style": "9.0.4",
     "@nordicsemiconductor/cloudformation-helpers": "6.0.36",
-    "@nordicsemiconductor/eslint-config-asset-tracker-cloud-typescript": "8.0.4",
+    "@nordicsemiconductor/eslint-config-asset-tracker-cloud-typescript": "8.0.5",
     "@types/aws-lambda": "8.10.81",
     "@types/dependency-tree": "8.1.1",
     "@types/glob": "7.1.4",
