@@ -91,7 +91,7 @@
     "remoteTags": true
   },
   "engines": {
-    "node": ">=14.0.0",
+    "node": ">=16.0.0",
     "npm": ">=7.0.0"
   },
   "lint-staged": {
