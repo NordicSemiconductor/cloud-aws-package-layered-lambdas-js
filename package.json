@@ -2,15 +2,14 @@
   "name": "@nordicsemiconductor/package-layered-lambdas",
   "version": "0.0.0-development",
   "description": "Packages lambda functions and layers for AWS lambda",
-  "exports": "./dist/src/index.js",
-  "typings": "./dist/src/index.d.ts",
-  "type": "module",
+  "main": "dist/src/index.js",
+  "typings": "dist/src/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/NordicSemiconductor/cloud-aws-package-layered-lambdas-js.git"
   },
   "scripts": {
-    "test": "node --experimental-vm-modules --unhandled-rejections=strict dist/test/e2e.js",
+    "test": "node --unhandled-rejections=strict dist/test/e2e.js",
     "lint": "eslint --ext .js,.ts src/**",
     "postinstall": "husky install",
     "prepublishOnly": "pinst --disable",
@@ -103,6 +102,5 @@
     "*.{md,json,yaml,yml,js}": [
       "prettier --write"
     ]
-  },
-  "prettier": "@nordicsemiconductor/asset-tracker-cloud-code-style/.prettierrc"
+  }
 }

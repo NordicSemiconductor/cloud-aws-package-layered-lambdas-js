@@ -1,4 +1,4 @@
-import { checkSumOfFiles } from './checkSum.js'
+import { checkSumOfFiles } from './checkSum'
 import * as path from 'path'
 import { promises as fs, unlinkSync } from 'fs'
 import * as dependencyTree from 'dependency-tree'

@@ -1,4 +1,4 @@
-import { default as glob } from 'glob'
+import * as glob from 'glob'
 import { promisify } from 'util'
 import * as crypto from 'crypto'
 import * as fs from 'fs'

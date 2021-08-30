@@ -1,12 +1,8 @@
 import * as path from 'path'
 import { promises as fs } from 'fs'
-import { getLambdaSourceCodeBucketName } from './getLambdaSourceCodeBucketName.js'
-import { TestStackLambdas } from './TestStack.js'
-import { packBaseLayer } from '@nordicsemiconductor/package-layered-lambdas'
-import {
-	packLayeredLambdas,
-	LayeredLambdas,
-} from '../src/packLayeredLambdas.js'
+import { getLambdaSourceCodeBucketName } from './getLambdaSourceCodeBucketName'
+import { TestStackLambdas } from './TestStack'
+import { packBaseLayer, packLayeredLambdas, LayeredLambdas } from '../src'
 
 export const prepareResources = async ({
 	stackName,

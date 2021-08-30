@@ -1,6 +1,6 @@
-import webpack from 'webpack'
-import { packLambda } from './packLambda.js'
-import { ProgressReporter, ConsoleProgressReporter } from './reporter.js'
+import * as webpack from 'webpack'
+import { packLambda } from './packLambda'
+import { ProgressReporter, ConsoleProgressReporter } from './reporter'
 
 export type LayeredLambdas<A extends { [key: string]: string }> = {
 	id: string
@@ -8,7 +8,7 @@ export type LayeredLambdas<A extends { [key: string]: string }> = {
 }
 
 export const packLayeredLambdas = async <
-	A extends { [key: string]: string },
+	A extends { [key: string]: string }
 >(args: {
 	id: string
 	tsConfig: string
