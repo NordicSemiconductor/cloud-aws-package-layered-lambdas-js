@@ -1,12 +1,12 @@
-import * as chalk from 'chalk'
-import * as webpack from 'webpack'
+import chalk from 'chalk'
+import webpack from 'webpack'
 import * as path from 'path'
 import * as fs from 'fs'
 import * as yazl from 'yazl'
-import { existsOnS3 } from './existsOnS3'
-import { publishToS3 } from './publishToS3'
-import { hashDependencies } from './hashDependencies'
-import { ProgressReporter } from './reporter'
+import { existsOnS3 } from './existsOnS3.js'
+import { publishToS3 } from './publishToS3.js'
+import { hashDependencies } from './hashDependencies.js'
+import { ProgressReporter } from './reporter.js'
 
 /**
  * Packs the lambda and all of its inter-project dependencies using webpack and uploads it to S3

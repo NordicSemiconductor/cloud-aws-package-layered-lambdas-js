@@ -1,5 +1,5 @@
-import { LambdaSourceCodeStorageApp } from './LambdaSourceCodeStorageApp'
-import { LambdaSourceCodeStorageStack } from './LambdaSourceCodeStorageStack'
+import { LambdaSourceCodeStorageApp } from './LambdaSourceCodeStorageApp.js'
+import { LambdaSourceCodeStorageStack } from './LambdaSourceCodeStorageStack.js'
 
 const stackName = process.env.STACK_NAME
 

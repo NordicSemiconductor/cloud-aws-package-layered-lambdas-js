@@ -1,6 +1,6 @@
-import * as chalk from 'chalk'
 import ansiEscapes from 'ansi-escapes'
 import { table } from 'table'
+import chalk from 'chalk'
 
 export type ProgressReporter = {
 	progress: (id: string) => (message: string, ...info: string[]) => void
@@ -148,19 +148,19 @@ const onScreen = (title: string) => {
 			startTimes[id] = new Date()
 		}
 	}
-	const addStatusMessage = (status: Status['status']) => (id: string) => (
-		message: string,
-		...info: string[]
-	) => {
-		items[id] = {
-			status,
-			message,
-			info,
-			updated: new Date(),
+	const addStatusMessage =
+		(status: Status['status']) =>
+		(id: string) =>
+		(message: string, ...info: string[]) => {
+			items[id] = {
+				status,
+				message,
+				info,
+				updated: new Date(),
+			}
+			start(id)
+			d(items, startTimes, sizesInBytes)
 		}
-		start(id)
-		d(items, startTimes, sizesInBytes)
-	}
 	return {
 		progress: addStatusMessage('progress'),
 		warn: addStatusMessage('progress'),
@@ -173,12 +173,12 @@ const onScreen = (title: string) => {
 	}
 }
 
-const log = (color: chalk.Chalk, brightColor: chalk.Chalk) => (id: string) => (
-	message: string,
-	...info: string[]
-) => {
-	console.log(color(id), brightColor(message), ...info)
-}
+const log =
+	(color: chalk.Chalk, brightColor: chalk.Chalk) =>
+	(id: string) =>
+	(message: string, ...info: string[]) => {
+		console.log(color(id), brightColor(message), ...info)
+	}
 
 const onCI = () => ({
 	progress: log(chalk.gray, chalk.gray),
