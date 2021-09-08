@@ -45,9 +45,9 @@
     "yazl": "2.5.1"
   },
   "devDependencies": {
-    "@aws-cdk/aws-lambda": "1.121.0",
-    "@aws-cdk/aws-s3": "1.121.0",
-    "@aws-cdk/core": "1.121.0",
+    "@aws-cdk/aws-lambda": "1.122.0",
+    "@aws-cdk/aws-s3": "1.122.0",
+    "@aws-cdk/core": "1.122.0",
     "@commitlint/cli": "13.1.0",
     "@commitlint/config-angular": "13.1.0",
     "@nordicsemiconductor/asset-tracker-cloud-code-style": "9.1.0",
@@ -63,7 +63,7 @@
     "@types/uuid": "8.3.1",
     "@types/webpack": "5.28.0",
     "@types/yazl": "2.4.2",
-    "cdk": "1.121.0",
+    "cdk": "1.122.0",
     "eslint": "7.32.0",
     "husky": "7.0.2",
     "lint-staged": "11.1.2",
