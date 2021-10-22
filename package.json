@@ -58,7 +58,7 @@
     "@types/node": "16.10.1",
     "@types/table": "6.3.2",
     "@types/terminal-kit": "1.28.4",
-    "@types/tmp": "0.2.1",
+    "@types/tmp": "0.2.2",
     "@types/uuid": "8.3.1",
     "@types/webpack": "5.28.0",
     "@types/yazl": "2.4.2",
