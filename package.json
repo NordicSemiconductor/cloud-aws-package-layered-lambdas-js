@@ -80,8 +80,8 @@
     "remoteTags": true
   },
   "engines": {
-    "node": "16",
-    "npm": "8"
+    "node": ">=14",
+    "npm": ">=7"
   },
   "lint-staged": {
     "*.ts": [
