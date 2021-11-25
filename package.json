@@ -39,7 +39,7 @@
     "tmp": "0.2.1",
     "ts-loader": "9.2.6",
     "uuid": "8.3.2",
-    "webpack": "5.64.3",
+    "webpack": "5.64.4",
     "yazl": "2.5.1"
   },
   "devDependencies": {
