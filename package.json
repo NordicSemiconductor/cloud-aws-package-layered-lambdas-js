@@ -2,6 +2,7 @@
   "name": "@nordicsemiconductor/package-layered-lambdas",
   "version": "0.0.0-development",
   "description": "Packages lambda functions and layers for AWS lambda",
+  "type": "module",
   "main": "dist/src/index.js",
   "typings": "dist/src/index.d.ts",
   "repository": {
@@ -91,5 +92,6 @@
     "*.{md,json,yaml,yml,js}": [
       "prettier --write"
     ]
-  }
+  },
+  "prettier": "@nordicsemiconductor/asset-tracker-cloud-code-style/.prettierrc"
 }
