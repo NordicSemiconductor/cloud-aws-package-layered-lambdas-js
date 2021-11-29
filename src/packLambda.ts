@@ -1,4 +1,4 @@
-import * as chalk from 'chalk'
+import chalk from 'chalk'
 import * as webpack from 'webpack'
 import * as path from 'path'
 import * as fs from 'fs'
