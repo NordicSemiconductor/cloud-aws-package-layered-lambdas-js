@@ -46,7 +46,7 @@
     "@aws-cdk/aws-lambda": "1.135.0",
     "@aws-cdk/aws-s3": "1.135.0",
     "@aws-cdk/core": "1.135.0",
-    "@nordicsemiconductor/asset-tracker-cloud-code-style": "9.2.32",
+    "@nordicsemiconductor/asset-tracker-cloud-code-style": "9.2.33",
     "@nordicsemiconductor/cloudformation-helpers": "6.1.23",
     "@types/aws-lambda": "8.10.87",
     "@types/dependency-tree": "8.1.1",
