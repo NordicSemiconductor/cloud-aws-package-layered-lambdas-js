@@ -43,9 +43,9 @@
     "yazl": "2.5.1"
   },
   "devDependencies": {
-    "@aws-cdk/aws-lambda": "1.135.0",
-    "@aws-cdk/aws-s3": "1.135.0",
-    "@aws-cdk/core": "1.135.0",
+    "@aws-cdk/aws-lambda": "1.136.0",
+    "@aws-cdk/aws-s3": "1.136.0",
+    "@aws-cdk/core": "1.136.0",
     "@nordicsemiconductor/asset-tracker-cloud-code-style": "9.2.33",
     "@nordicsemiconductor/cloudformation-helpers": "6.1.24",
     "@types/aws-lambda": "8.10.88",
@@ -58,7 +58,7 @@
     "@types/uuid": "8.3.3",
     "@types/webpack": "5.28.0",
     "@types/yazl": "2.4.2",
-    "cdk": "1.135.0"
+    "cdk": "1.136.0"
   },
   "files": [
     "package-lock.json",
