@@ -1,8 +1,8 @@
-import * as path from 'path'
 import { promises as fs } from 'fs'
+import * as path from 'path'
+import { LayeredLambdas, packBaseLayer, packLayeredLambdas } from '../src'
 import { getLambdaSourceCodeBucketName } from './getLambdaSourceCodeBucketName'
 import { TestStackLambdas } from './TestStack'
-import { packBaseLayer, packLayeredLambdas, LayeredLambdas } from '../src'
 
 export const prepareResources = async ({
 	stackName,
@@ -81,7 +81,6 @@ export const prepareResources = async ({
 		lambdas: {
 			uuid: path.resolve(rootDir, 'test', 'uuidLambda.ts'),
 		},
-		tsConfig: path.resolve(rootDir, 'tsconfig.json'),
 	})
 
 	return {
