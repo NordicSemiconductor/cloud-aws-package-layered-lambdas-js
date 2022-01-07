@@ -47,14 +47,14 @@ export class TestStack extends CloudFormation.Stack {
 			compatibleRuntimes: [NodeJS14Runtime],
 		})
 
-		const uuidLambda = new Lambda.Function(this, 'uuidLambda', {
+		const uuid = new Lambda.Function(this, 'uuid', {
 			code: Lambda.Code.fromBucket(
 				sourceCodeBucket,
 				lambdas.lambdaZipFileNames.uuid,
 			),
 			layers: [baseLayer],
 			description: 'Returns a v4 UUID',
-			handler: 'index.handler',
+			handler: 'lambda/uuid.handler',
 			// runtime: Lambda.Runtime.NODEJS_14_X, // FIXME: use once CDK has support. See https://github.com/aws/aws-cdk/pull/12861
 			runtime: NodeJS14Runtime,
 			timeout: CloudFormation.Duration.seconds(15),
@@ -70,14 +70,14 @@ export class TestStack extends CloudFormation.Stack {
 			],
 		})
 
-		new CloudFormation.CfnOutput(this, 'uuidLambdaName', {
-			value: uuidLambda.functionName,
-			exportName: `${this.stackName}:uuidLambdaName`,
+		new CloudFormation.CfnOutput(this, 'uuidName', {
+			value: uuid.functionName,
+			exportName: `${this.stackName}:uuidName`,
 		})
 
-		new CloudWatchLogs.LogGroup(this, 'uuidLambdaLogGroup', {
+		new CloudWatchLogs.LogGroup(this, 'uuidLogGroup', {
 			removalPolicy: CloudFormation.RemovalPolicy.DESTROY,
-			logGroupName: `/aws/lambda/${uuidLambda.functionName}`,
+			logGroupName: `/aws/lambda/${uuid.functionName}`,
 			retention: CloudWatchLogs.RetentionDays.ONE_DAY,
 		})
 	}

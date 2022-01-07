@@ -8,11 +8,11 @@ const cf = new CloudFormationClient({})
 const so = stackOutput(cf)
 const λ = new LambdaClient({})
 
-so<{ uuidLambdaName: string }>(process.env.STACK_NAME ?? '')
-	.then(async ({ uuidLambdaName }) =>
+so<{ uuidName: string }>(process.env.STACK_NAME ?? '')
+	.then(async ({ uuidName }) =>
 		λ.send(
 			new InvokeCommand({
-				FunctionName: uuidLambdaName,
+				FunctionName: uuidName,
 			}),
 		),
 	)

@@ -31,15 +31,14 @@
     "@aws-sdk/client-cloudformation": "3.45.0",
     "@aws-sdk/client-lambda": "3.45.0",
     "@aws-sdk/client-s3": "3.45.0",
-    "@lukeed/uuid": "2.0.0",
     "ansi-escapes": "5.0.0",
     "aws-lambda": "1.0.7",
     "chalk": "5.0.0",
     "dependency-tree": "8.1.2",
-    "esbuild": "0.14.10",
     "glob": "7.2.0",
     "table": "6.8.0",
     "tmp": "0.2.1",
+    "uuid": "8.3.2",
     "yazl": "2.5.1"
   },
   "devDependencies": {
@@ -52,6 +51,7 @@
     "@types/table": "6.3.2",
     "@types/terminal-kit": "1.28.4",
     "@types/tmp": "0.2.3",
+    "@types/uuid": "8.3.4",
     "@types/yazl": "2.4.2",
     "aws-cdk-lib": "2.4.0",
     "cdk": "2.4.0"

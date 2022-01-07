@@ -1,5 +1,4 @@
 import chalk from 'chalk'
-import { build, BuildOptions } from 'esbuild'
 import fs from 'fs'
 import path from 'path'
 import yazl from 'yazl'
@@ -19,8 +18,6 @@ export const packLambda = async (args: {
 	name: string
 	src: string
 	reporter?: ProgressReporter
-	ignoreFolders?: string[]
-	esbuildOptions?: BuildOptions
 }): Promise<{
 	name: string
 	zipFileName: string
@@ -30,36 +27,11 @@ export const packLambda = async (args: {
 		hashes: { [key: string]: string }
 	}
 }> => {
-	const { outDir, Bucket, name, src, reporter, esbuildOptions } = args
+	const { outDir, Bucket, name, src, reporter, srcDir } = args
 	const progress = reporter?.progress?.(name)
 	const success = reporter?.success?.(name)
 	const failure = reporter?.failure?.(name)
 	const sizeInBytes = reporter?.sizeInBytes?.(name)
-
-	const buildOpts: BuildOptions = {
-		entryPoints: [src],
-		bundle: true,
-		format: 'esm',
-		platform: 'node',
-		plugins: [
-			{
-				name: 'exclude-node_modules',
-				setup: (build) => {
-					build.onResolve({ filter: /./ }, (args) => {
-						const absolutePath = path.join(args.resolveDir, args.path)
-						if (absolutePath.includes('/node_modules/')) {
-							return {
-								path: args.resolveDir.replace(/.+\/node_modules\//, ''),
-								external: true,
-							}
-						}
-						return undefined
-					})
-				},
-			},
-		],
-		...esbuildOptions,
-	}
 
 	try {
 		fs.statSync(src)
@@ -76,8 +48,7 @@ export const packLambda = async (args: {
 		name,
 	})
 	const { checksum: depsChecksum, hashes } = deps
-	const hash = checkSumOfStrings([depsChecksum, JSON.stringify(buildOpts)])
-	const jsFilenameWithHash = `${name}-${hash}.js`
+	const hash = checkSumOfStrings([depsChecksum])
 	const zipFilenameWithHash = `${name}-${hash}-esm.zip`
 	const localPath = path.resolve(outDir, zipFilenameWithHash)
 
@@ -126,19 +97,27 @@ export const packLambda = async (args: {
 	}
 
 	progress?.('Packing')
-	const f = path.resolve(outDir, jsFilenameWithHash)
-	await build({
-		...buildOpts,
-		outfile: f,
-	})
-
 	await new Promise<void>((resolve, reject) => {
 		progress?.('Creating archive')
 		const zipfile = new yazl.ZipFile()
-		zipfile.addFile(f, 'index.js')
+		// Add script
+		console.log(src)
+		zipfile.addFile(src, src.replace(srcDir, '').replace(/^\//, ''))
+		// Add all dependencies (includes the entry script itself)
+		for (const dep of deps.files.filter((f) => f !== src)) {
+			console.log(dep)
+			zipfile.addFile(dep, dep.replace(srcDir, '').replace(/^\//, ''))
+		}
 		zipfile.addBuffer(
-			Buffer.from(JSON.stringify(hashes, null, 2)),
-			'hashes.json',
+			Buffer.from(
+				Object.entries(hashes)
+					.map(
+						([file, hash]) =>
+							`${hash}\t${file.replace(srcDir, '').replace(/^\//, '')}`,
+					)
+					.join('\n'),
+			),
+			'hashes.tsv',
 		)
 		zipfile.addBuffer(
 			Buffer.from(

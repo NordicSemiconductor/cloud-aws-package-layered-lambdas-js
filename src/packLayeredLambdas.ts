@@ -1,4 +1,3 @@
-import { BuildOptions } from 'esbuild'
 import { packLambda } from './packLambda.js'
 import { ConsoleProgressReporter, ProgressReporter } from './reporter.js'
 
@@ -17,7 +16,6 @@ export const packLayeredLambdas = async <
 	lambdas: A
 	ignoreFolders?: string[]
 	reporter?: ProgressReporter
-	esbuildOptions?: BuildOptions
 }): Promise<LayeredLambdas<A>> => {
 	const r = args.reporter ?? ConsoleProgressReporter(args.id)
 	const packs = await Promise.all(
@@ -27,7 +25,6 @@ export const packLayeredLambdas = async <
 				name: lambda,
 				src: args.lambdas[lambda],
 				reporter: r,
-				esbuildOptions: args.esbuildOptions,
 			}),
 		),
 	)

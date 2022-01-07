@@ -46,7 +46,7 @@ export const prepareResources = async ({
 		await fs.readFile(path.resolve(rootDir, 'package.json'), 'utf-8'),
 	)
 	const lambdaDependencies = {
-		'@lukeed/uuid': dependencies['@lukeed/uuid'],
+		uuid: dependencies['uuid'],
 	}
 	if (
 		Object.values(lambdaDependencies).find((v) => v === undefined) !== undefined
@@ -77,16 +77,14 @@ export const prepareResources = async ({
 	})
 
 	// Pack the lambda
+	const distDir = path.join(rootDir, 'dist')
 	const lambdas = await packLayeredLambdas<TestStackLambdas>({
 		id: 'test-lambdas',
-		srcDir: rootDir,
+		srcDir: distDir,
 		outDir,
 		Bucket: sourceCodeBucketName,
 		lambdas: {
-			uuid: path.resolve(rootDir, 'test', 'uuidLambda.ts'),
-		},
-		esbuildOptions: {
-			external: ['@lukeed/uuid/secure'],
+			uuid: path.resolve(distDir, 'lambda', 'uuid.js'),
 		},
 	})
 
