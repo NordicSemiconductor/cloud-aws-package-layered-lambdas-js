@@ -1,6 +1,6 @@
 import * as crypto from 'crypto'
 import * as fs from 'fs'
-import glob from 'glob'
+import * as glob from 'glob'
 import { promisify } from 'util'
 
 const g = promisify(glob)

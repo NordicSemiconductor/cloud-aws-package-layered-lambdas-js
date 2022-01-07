@@ -6,9 +6,8 @@
 [![Mergify Status](https://img.shields.io/endpoint.svg?url=https://gh.mergify.io/badges/NordicSemiconductor/cloud-aws-package-layered-lambdas-js)](https://mergify.io)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 
-Packages lambdas with intra-project dependencies using
-[esbuild](https://github.com/evanw/esbuild) and a base layer with the
-dependencies defined in `package.json`.
+Packages lambdas with intra-project dependencies using Webpack and a base layer
+with the dependencies defined in `package.json`.
 
 Checksums are created for dependencies per lambda so that rebuild only happens
 when files are changed.

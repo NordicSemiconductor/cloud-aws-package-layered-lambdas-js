@@ -1,5 +1,5 @@
 import { App } from 'aws-cdk-lib'
-import { LambdaSourceCodeStorageStack } from './LambdaSourceCodeStorageStack.js'
+import { LambdaSourceCodeStorageStack } from './LambdaSourceCodeStorageStack'
 
 /**
  * In order to deploy lambda functions written in TypeScript we need to publish

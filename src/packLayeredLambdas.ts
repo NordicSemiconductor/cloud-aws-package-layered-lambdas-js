@@ -1,6 +1,6 @@
-import { BuildOptions } from 'esbuild'
-import { packLambda } from './packLambda.js'
-import { ConsoleProgressReporter, ProgressReporter } from './reporter.js'
+import * as webpack from 'webpack'
+import { packLambda } from './packLambda'
+import { ConsoleProgressReporter, ProgressReporter } from './reporter'
 
 export type LayeredLambdas<A extends { [key: string]: string }> = {
 	id: string
@@ -11,13 +11,14 @@ export const packLayeredLambdas = async <
 	A extends { [key: string]: string },
 >(args: {
 	id: string
+	tsConfig: string
 	srcDir: string
 	outDir: string
 	Bucket: string
 	lambdas: A
 	ignoreFolders?: string[]
 	reporter?: ProgressReporter
-	esbuildOptions?: BuildOptions
+	webpackConfiguration?: webpack.Configuration
 }): Promise<LayeredLambdas<A>> => {
 	const r = args.reporter ?? ConsoleProgressReporter(args.id)
 	const packs = await Promise.all(
@@ -27,7 +28,7 @@ export const packLayeredLambdas = async <
 				name: lambda,
 				src: args.lambdas[lambda],
 				reporter: r,
-				esbuildOptions: args.esbuildOptions,
+				webpackConfiguration: args.webpackConfiguration,
 			}),
 		),
 	)

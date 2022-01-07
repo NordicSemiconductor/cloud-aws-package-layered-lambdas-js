@@ -1,5 +1,5 @@
 import ansiEscapes from 'ansi-escapes'
-import chalk, { ChalkInstance } from 'chalk'
+import * as chalk from 'chalk'
 import { table } from 'table'
 
 export type ProgressReporter = {
@@ -174,7 +174,7 @@ const onScreen = (title: string) => {
 }
 
 const log =
-	(color: ChalkInstance, brightColor: ChalkInstance) =>
+	(color: chalk.Chalk, brightColor: chalk.Chalk) =>
 	(id: string) =>
 	(message: string, ...info: string[]) => {
 		console.log(color(id), brightColor(message), ...info)

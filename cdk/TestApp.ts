@@ -1,6 +1,6 @@
 import { App } from 'aws-cdk-lib'
-import { LayeredLambdas } from '../src/index.js'
-import { TestStack, TestStackLambdas } from './TestStack.js'
+import { LayeredLambdas } from '../src'
+import { TestStack, TestStackLambdas } from './TestStack'
 
 export class TestApp extends App {
 	public constructor(args: {

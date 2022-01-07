@@ -2,9 +2,6 @@
   "extends": "@nordicsemiconductor/asset-tracker-cloud-code-style/tsconfig.json",
   "include": ["**/*.ts"],
   "compilerOptions": {
-    "outDir": "dist/",
-    "moduleResolution": "node",
-    "module": "ES2020",
-    "allowSyntheticDefaultImports": true
+    "outDir": "dist/"
   }
 }
