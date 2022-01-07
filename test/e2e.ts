@@ -18,10 +18,9 @@ so<{ uuidLambdaName: string }>(process.env.STACK_NAME ?? '')
 	)
 	.then(({ Payload }) => {
 		if (Payload === undefined) throw new Error(`No payload.`)
+		const response = new TextDecoder('utf-8').decode(Payload)
 		try {
-			const { statusCode, body } = JSON.parse(
-				new TextDecoder('utf-8').decode(Payload),
-			)
+			const { statusCode, body } = JSON.parse(response)
 			console.debug({ statusCode, body })
 			assert.equal(statusCode, 200, 'Status code should be 200')
 			assert.match(
@@ -30,7 +29,7 @@ so<{ uuidLambdaName: string }>(process.env.STACK_NAME ?? '')
 				'Body should be a v4 UUID',
 			)
 		} catch (err) {
-			assert.fail(`Failed to parse JSON: ${Payload?.toString() ?? ''}`)
+			assert.fail(`Failed to parse JSON: ${response}`)
 		}
 	})
 	.catch((err) => {

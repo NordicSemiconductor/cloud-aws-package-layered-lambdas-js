@@ -85,6 +85,9 @@ export const prepareResources = async ({
 		lambdas: {
 			uuid: path.resolve(rootDir, 'test', 'uuidLambda.ts'),
 		},
+		esbuildOptions: {
+			external: ['@lukeed/uuid/secure'],
+		},
 	})
 
 	return {
