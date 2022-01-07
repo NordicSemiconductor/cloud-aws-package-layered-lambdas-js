@@ -1,5 +1,5 @@
-import { App, CfnOutput, RemovalPolicy, Stack } from '@aws-cdk/core'
-import { Bucket } from '@aws-cdk/aws-s3'
+import { App, CfnOutput, RemovalPolicy, Stack } from 'aws-cdk-lib'
+import { Bucket } from 'aws-cdk-lib/aws-s3'
 
 /**
  * This stack provides a bucket to store the source code for the lambda functions
@@ -19,7 +19,7 @@ export class LambdaSourceCodeStorageStack extends Stack {
 		})
 	}
 
-	static stackName({ stackName }: { stackName: string }) {
+	static stackName({ stackName }: { stackName: string }): string {
 		return stackName + '-sourcecode'
 	}
 }
