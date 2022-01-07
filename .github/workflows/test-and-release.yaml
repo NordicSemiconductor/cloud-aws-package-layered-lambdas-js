@@ -45,6 +45,7 @@ jobs:
         run: npx tsc
       - name: Set up stack for tests
         run: |
+          npx cdk bootstrap
           npx cdk -a 'node dist/cdk/cloudformation-sourcecode.js' deploy
           npx cdk -a 'node dist/cdk/cloudformation.js' deploy --require-approval never
       - name: Run tests
