@@ -39,7 +39,7 @@ export const packLambda = async (args: {
 	const buildOpts: BuildOptions = {
 		entryPoints: [src],
 		bundle: true,
-		format: 'cjs',
+		format: 'esm',
 		platform: 'node',
 		plugins: [
 			{
