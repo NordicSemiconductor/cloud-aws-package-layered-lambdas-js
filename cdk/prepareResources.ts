@@ -46,7 +46,7 @@ export const prepareResources = async ({
 		await fs.readFile(path.resolve(rootDir, 'package.json'), 'utf-8'),
 	)
 	const lambdaDependencies = {
-		uuid: dependencies['uuid'],
+		'@lukeed/uuid': dependencies['@lukeed/uuid'],
 	}
 	if (
 		Object.values(lambdaDependencies).find((v) => v === undefined) !== undefined
