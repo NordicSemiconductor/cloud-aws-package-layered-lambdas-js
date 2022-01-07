@@ -1,6 +1,10 @@
 import { promises as fs } from 'fs'
 import * as path from 'path'
-import { LayeredLambdas, packBaseLayer, packLayeredLambdas } from '../src'
+import {
+	LayeredLambdas,
+	packBaseLayer,
+	packLayeredLambdas,
+} from '../src/index.js'
 import { getLambdaSourceCodeBucketName } from './getLambdaSourceCodeBucketName.js'
 import { TestStackLambdas } from './TestStack.js'
 

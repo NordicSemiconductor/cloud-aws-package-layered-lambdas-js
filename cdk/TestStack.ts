@@ -3,7 +3,7 @@ import * as Lambda from '@aws-cdk/aws-lambda'
 import * as CloudWatchLogs from '@aws-cdk/aws-logs'
 import * as S3 from '@aws-cdk/aws-s3'
 import * as CloudFormation from '@aws-cdk/core'
-import { LayeredLambdas } from '../src'
+import { LayeredLambdas } from '../src/index.js'
 
 export type TestStackLambdas = {
 	uuid: string
