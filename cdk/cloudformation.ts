@@ -1,5 +1,5 @@
-import { TestApp } from './TestApp'
-import { prepareResources } from './prepareResources'
+import { prepareResources } from './prepareResources.js'
+import { TestApp } from './TestApp.js'
 
 const stackName = process.env.STACK_NAME
 

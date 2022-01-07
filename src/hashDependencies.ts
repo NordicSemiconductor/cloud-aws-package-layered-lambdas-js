@@ -1,7 +1,7 @@
-import { checkSumOfFiles } from './checkSum'
-import * as path from 'path'
-import { promises as fs, unlinkSync } from 'fs'
 import * as dependencyTree from 'dependency-tree'
+import { promises as fs, unlinkSync } from 'fs'
+import * as path from 'path'
+import { checkSumOfFiles } from './checkSum.js'
 
 /**
  * Hashes the dependencies of a lambda
@@ -11,14 +11,13 @@ export const hashDependencies = async (args: {
 	src: string
 	srcDir: string
 	outDir: string
-	tsConfig: string
 	ignoreFolders?: string[]
 }): Promise<{
 	checksum: string
 	hashes: { [key: string]: string }
 	files: string[]
 }> => {
-	const { srcDir, src, name, tsConfig, ignoreFolders } = args
+	const { srcDir, src, name, ignoreFolders } = args
 	// Cache dependencies
 	const dependenciesFile = path.resolve(args.outDir, `${name}.deps.json`)
 	try {
@@ -41,7 +40,6 @@ export const hashDependencies = async (args: {
 		const deps = dependencyTree.toList({
 			filename: src,
 			directory: srcDir,
-			tsConfig,
 			filter: (sourceFile: string) =>
 				!sourceFile.includes('node_modules') && ignoreFolders // do not look at module dependencies
 					? ignoreFolders.reduce((pass, folder) => {

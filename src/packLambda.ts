@@ -1,15 +1,16 @@
-import * as chalk from 'chalk'
-import * as webpack from 'webpack'
-import * as path from 'path'
-import * as fs from 'fs'
-import * as yazl from 'yazl'
-import { existsOnS3 } from './existsOnS3'
-import { publishToS3 } from './publishToS3'
-import { hashDependencies } from './hashDependencies'
-import { ProgressReporter } from './reporter'
+import chalk from 'chalk'
+import { build, BuildOptions } from 'esbuild'
+import fs from 'fs'
+import path from 'path'
+import yazl from 'yazl'
+import { checkSumOfStrings } from './checkSum.js'
+import { existsOnS3 } from './existsOnS3.js'
+import { hashDependencies } from './hashDependencies.js'
+import { publishToS3 } from './publishToS3.js'
+import { ProgressReporter } from './reporter.js'
 
 /**
- * Packs the lambda and all of its inter-project dependencies using webpack and uploads it to S3
+ * Packs the lambda and all of its inter-project dependencies using esbuild and uploads it to S3
  */
 export const packLambda = async (args: {
 	srcDir: string
@@ -17,10 +18,9 @@ export const packLambda = async (args: {
 	Bucket: string
 	name: string
 	src: string
-	tsConfig: string
 	reporter?: ProgressReporter
 	ignoreFolders?: string[]
-	webpackConfiguration?: webpack.Configuration
+	esbuildOptions?: BuildOptions
 }): Promise<{
 	name: string
 	zipFileName: string
@@ -30,19 +30,36 @@ export const packLambda = async (args: {
 		hashes: { [key: string]: string }
 	}
 }> => {
-	const {
-		tsConfig,
-		outDir,
-		Bucket,
-		name,
-		src,
-		reporter,
-		webpackConfiguration,
-	} = args
+	const { outDir, Bucket, name, src, reporter, esbuildOptions } = args
 	const progress = reporter?.progress?.(name)
 	const success = reporter?.success?.(name)
 	const failure = reporter?.failure?.(name)
 	const sizeInBytes = reporter?.sizeInBytes?.(name)
+
+	const buildOpts: BuildOptions = {
+		entryPoints: [src],
+		bundle: true,
+		format: 'cjs',
+		platform: 'node',
+		plugins: [
+			{
+				name: 'exclude-node_modules',
+				setup: (build) => {
+					build.onResolve({ filter: /./ }, (args) => {
+						const absolutePath = path.join(args.resolveDir, args.path)
+						if (absolutePath.includes('/node_modules/')) {
+							return {
+								path: args.resolveDir.replace(/.+\/node_modules\//, ''),
+								external: true,
+							}
+						}
+						return undefined
+					})
+				},
+			},
+		],
+		...esbuildOptions,
+	}
 
 	try {
 		fs.statSync(src)
@@ -58,7 +75,8 @@ export const packLambda = async (args: {
 		...args,
 		name,
 	})
-	const { checksum: hash, hashes } = deps
+	const { checksum: depsChecksum, hashes } = deps
+	const hash = checkSumOfStrings([depsChecksum, JSON.stringify(buildOpts)])
 	const jsFilenameWithHash = `${name}-${hash}.js`
 	const zipFilenameWithHash = `${name}-${hash}-113ed.zip`
 	const localPath = path.resolve(outDir, zipFilenameWithHash)
@@ -108,78 +126,35 @@ export const packLambda = async (args: {
 	}
 
 	progress?.('Packing')
-	await new Promise<void>((resolve, reject) =>
-		webpack(
-			{
-				entry: [src],
-				mode: 'production',
-				target: 'node',
-				externals: [
-					// ignore all modules in node_modules folder
-					// Every non-relative module is external
-					// abc -> require("abc")
-					/^[a-z\-0-9]+$/,
-				],
-				module: {
-					rules: [
-						{
-							test: /\.ts$/,
-							loader: 'ts-loader',
-							exclude: /node_modules/,
-							options: {
-								configFile: tsConfig,
-								transpileOnly: true,
-							},
-						},
-						...(webpackConfiguration?.module?.rules ?? []),
-					],
-					...webpackConfiguration?.module,
-				},
-				optimization: {
-					removeAvailableModules: false,
-					splitChunks: false,
-					minimize: false,
-					...webpackConfiguration?.optimization,
-				},
-				resolve: {
-					extensions: ['.ts', '.ts', '.js'],
-				},
-				output: {
-					path: outDir,
-					libraryTarget: 'umd',
-					filename: jsFilenameWithHash,
-				},
-				...webpackConfiguration,
-			},
-			async (err, stats) => {
-				if (err !== null && err !== undefined) {
-					failure?.('webpack failed', err?.message)
-					console.error(err)
-					if (stats?.hasErrors() ?? false) console.error(stats?.toString())
-					return reject(err)
-				}
-				const f = path.resolve(outDir, jsFilenameWithHash)
+	const f = path.resolve(outDir, jsFilenameWithHash)
+	await build({
+		...buildOpts,
+		outfile: f,
+	})
 
-				progress?.('Creating archive')
-				const zipfile = new yazl.ZipFile()
-				zipfile.addFile(f, 'index.js')
-				zipfile.addBuffer(
-					Buffer.from(JSON.stringify(hashes, null, 2)),
-					'hashes.json',
+	await new Promise<void>((resolve, reject) => {
+		progress?.('Creating archive')
+		const zipfile = new yazl.ZipFile()
+		zipfile.addFile(f, 'index.js')
+		zipfile.addBuffer(
+			Buffer.from(JSON.stringify(hashes, null, 2)),
+			'hashes.json',
+		)
+		zipfile.outputStream
+			.pipe(fs.createWriteStream(localPath))
+			.on('close', () => {
+				success?.(
+					'Lambda packed',
+					`${Math.round(fs.statSync(localPath).size / 1024)}KB`,
 				)
-				zipfile.outputStream
-					.pipe(fs.createWriteStream(localPath))
-					.on('close', () => {
-						success?.(
-							'Lambda packed',
-							`${Math.round(fs.statSync(localPath).size / 1024)}KB`,
-						)
-						resolve()
-					})
-				zipfile.end()
-			},
-		),
-	)
+				resolve()
+			})
+			.on('error', () => {
+				failure?.(`Failed to create ZIP archive!`)
+				reject(new Error(`Failed to create ZIP archive.`))
+			})
+		zipfile.end()
+	})
 
 	progress?.('Publishing to S3', `-> ${Bucket}`)
 	await publishToS3(Bucket, zipFilenameWithHash, localPath)
