@@ -1,7 +1,7 @@
-import * as path from 'path'
 import { promises as fs } from 'fs'
-import { ProgressReporter } from './reporter'
-import { packBaseLayer } from './packBaseLayer'
+import * as path from 'path'
+import { packBaseLayer } from './packBaseLayer.js'
+import { ProgressReporter } from './reporter.js'
 
 /**
  * Creates a layer by selecting dependencies from the provided package.json.
