@@ -100,12 +100,8 @@ export const packLambda = async (args: {
 	await new Promise<void>((resolve, reject) => {
 		progress?.('Creating archive')
 		const zipfile = new yazl.ZipFile()
-		// Add script
-		console.log(src)
-		zipfile.addFile(src, src.replace(srcDir, '').replace(/^\//, ''))
 		// Add all dependencies (includes the entry script itself)
-		for (const dep of deps.files.filter((f) => f !== src)) {
-			console.log(dep)
+		for (const dep of deps.files) {
 			zipfile.addFile(dep, dep.replace(srcDir, '').replace(/^\//, ''))
 		}
 		zipfile.addBuffer(
@@ -123,7 +119,7 @@ export const packLambda = async (args: {
 			Buffer.from(
 				JSON.stringify(
 					{
-						name,
+						name: `@lambda/${name}`,
 						type: 'module',
 					},
 					null,

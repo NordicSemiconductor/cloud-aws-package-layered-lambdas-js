@@ -6,7 +6,7 @@ import * as S3 from 'aws-cdk-lib/aws-s3'
 import { LayeredLambdas } from '../src/index.js'
 
 export type TestStackLambdas = {
-	uuid: string
+	uuidLambda: string
 }
 
 export class TestStack extends CloudFormation.Stack {
@@ -50,11 +50,11 @@ export class TestStack extends CloudFormation.Stack {
 		const uuid = new Lambda.Function(this, 'uuid', {
 			code: Lambda.Code.fromBucket(
 				sourceCodeBucket,
-				lambdas.lambdaZipFileNames.uuid,
+				lambdas.lambdaZipFileNames.uuidLambda,
 			),
 			layers: [baseLayer],
 			description: 'Returns a v4 UUID',
-			handler: 'lambda/uuid.handler',
+			handler: 'lambda/uuidLambda.handler',
 			// runtime: Lambda.Runtime.NODEJS_14_X, // FIXME: use once CDK has support. See https://github.com/aws/aws-cdk/pull/12861
 			runtime: NodeJS14Runtime,
 			timeout: CloudFormation.Duration.seconds(15),
@@ -70,9 +70,9 @@ export class TestStack extends CloudFormation.Stack {
 			],
 		})
 
-		new CloudFormation.CfnOutput(this, 'uuidName', {
+		new CloudFormation.CfnOutput(this, 'uuidLambdaName', {
 			value: uuid.functionName,
-			exportName: `${this.stackName}:uuidName`,
+			exportName: `${this.stackName}:uuidLambdaName`,
 		})
 
 		new CloudWatchLogs.LogGroup(this, 'uuidLogGroup', {

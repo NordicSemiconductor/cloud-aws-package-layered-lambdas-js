@@ -84,7 +84,7 @@ export const prepareResources = async ({
 		outDir,
 		Bucket: sourceCodeBucketName,
 		lambdas: {
-			uuid: path.resolve(distDir, 'lambda', 'uuid.js'),
+			uuidLambda: path.resolve(distDir, 'lambda', 'uuidLambda.js'),
 		},
 	})
 
