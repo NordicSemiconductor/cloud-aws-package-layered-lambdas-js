@@ -140,6 +140,19 @@ export const packLambda = async (args: {
 			Buffer.from(JSON.stringify(hashes, null, 2)),
 			'hashes.json',
 		)
+		zipfile.addBuffer(
+			Buffer.from(
+				JSON.stringify(
+					{
+						name,
+						type: 'module',
+					},
+					null,
+					2,
+				),
+			),
+			'package.json',
+		)
 		zipfile.outputStream
 			.pipe(fs.createWriteStream(localPath))
 			.on('close', () => {
