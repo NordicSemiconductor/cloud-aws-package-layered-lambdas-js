@@ -1,6 +1,6 @@
 import { spawn } from 'child_process'
 import * as fs from 'fs'
-import * as glob from 'glob'
+import glob from 'glob'
 import * as path from 'path'
 import { dirSync } from 'tmp'
 import * as yazl from 'yazl'
