@@ -78,7 +78,7 @@ export const packLambda = async (args: {
 	const { checksum: depsChecksum, hashes } = deps
 	const hash = checkSumOfStrings([depsChecksum, JSON.stringify(buildOpts)])
 	const jsFilenameWithHash = `${name}-${hash}.js`
-	const zipFilenameWithHash = `${name}-${hash}-113ed.zip`
+	const zipFilenameWithHash = `${name}-${hash}-esm.zip`
 	const localPath = path.resolve(outDir, zipFilenameWithHash)
 
 	// Check if it already has been built and published
