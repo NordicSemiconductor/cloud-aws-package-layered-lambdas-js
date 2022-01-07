@@ -43,9 +43,6 @@
     "yazl": "2.5.1"
   },
   "devDependencies": {
-    "@aws-cdk/aws-lambda": "1.138.0",
-    "@aws-cdk/aws-s3": "1.138.0",
-    "@aws-cdk/core": "1.138.0",
     "@nordicsemiconductor/asset-tracker-cloud-code-style": "10.0.7",
     "@nordicsemiconductor/cloudformation-helpers": "6.1.25",
     "@types/aws-lambda": "8.10.89",
@@ -57,6 +54,7 @@
     "@types/tmp": "0.2.3",
     "@types/uuid": "8.3.4",
     "@types/yazl": "2.4.2",
+    "aws-cdk-lib": "2.4.0",
     "cdk": "2.4.0"
   },
   "files": [

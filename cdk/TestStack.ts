@@ -1,8 +1,8 @@
-import * as IAM from '@aws-cdk/aws-iam'
-import * as Lambda from '@aws-cdk/aws-lambda'
-import * as CloudWatchLogs from '@aws-cdk/aws-logs'
-import * as S3 from '@aws-cdk/aws-s3'
-import * as CloudFormation from '@aws-cdk/core'
+import * as CloudFormation from 'aws-cdk-lib'
+import * as IAM from 'aws-cdk-lib/aws-iam'
+import * as Lambda from 'aws-cdk-lib/aws-lambda'
+import * as CloudWatchLogs from 'aws-cdk-lib/aws-logs'
+import * as S3 from 'aws-cdk-lib/aws-s3'
 import { LayeredLambdas } from '../src/index.js'
 
 export type TestStackLambdas = {
@@ -42,13 +42,13 @@ export class TestStack extends CloudFormation.Stack {
 		)
 
 		const baseLayer = new Lambda.LayerVersion(this, `${id}-layer`, {
-			code: Lambda.Code.bucket(sourceCodeBucket, baseLayerZipFileName),
+			code: Lambda.Code.fromBucket(sourceCodeBucket, baseLayerZipFileName),
 			// compatibleRuntimes: [Lambda.Runtime.NODEJS_14_X], // FIXME: use once CDK has support. See https://github.com/aws/aws-cdk/pull/12861
 			compatibleRuntimes: [NodeJS14Runtime],
 		})
 
 		const uuidLambda = new Lambda.Function(this, 'uuidLambda', {
-			code: Lambda.Code.bucket(
+			code: Lambda.Code.fromBucket(
 				sourceCodeBucket,
 				lambdas.lambdaZipFileNames.uuid,
 			),

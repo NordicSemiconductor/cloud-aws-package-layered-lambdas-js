@@ -1,4 +1,4 @@
-import { App } from '@aws-cdk/core'
+import { App } from 'aws-cdk-lib'
 import { LayeredLambdas } from '../src/index.js'
 import { TestStack, TestStackLambdas } from './TestStack.js'
 
