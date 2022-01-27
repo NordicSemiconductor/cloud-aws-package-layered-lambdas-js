@@ -17,7 +17,7 @@ CloudFormation and shared also cached for other developers.
 
 ## Installation
 
-    npm i --save-dev @nordicsemiconductor/package-layered-lambdas
+    npm i --save-dev --save-exact @nordicsemiconductor/package-layered-lambdas
 
 ## Usage
 
