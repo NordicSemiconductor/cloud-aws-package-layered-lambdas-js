@@ -24,7 +24,7 @@ jobs:
           node-version: "16.x"
       - name: Cache AWS CLI
         id: cache-aws-cli
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: aws/
           key: ${{ runner.OS }}-cache-aws-cli
@@ -35,7 +35,7 @@ jobs:
           unzip awscliv2.zip
           sudo ./aws/install
       - name: Keep npm cache around to speed up installs
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ~/.npm
           key: ${{ runner.OS }}-build-${{ hashFiles('**/package-lock.json') }}
