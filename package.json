@@ -56,7 +56,7 @@
     "@types/webpack": "5.28.0",
     "@types/yazl": "2.4.2",
     "aws-cdk-lib": "2.18.0",
-    "cdk": "2.18.0"
+    "cdk": "2.19.0"
   },
   "files": [
     "package-lock.json",
