@@ -50,7 +50,7 @@ export const prepareResources = async ({
 		throw new Error(
 			`Could not resolve all dependencies in "${JSON.stringify(
 				lambdaDependencies,
-			)}"`!,
+			)}"!`,
 		)
 	}
 	// - add them to the layers package.json
