@@ -46,7 +46,7 @@ export const makeLayerFromPackageJSON = async ({
 		const resolvedDependency = dependencies[dep] ?? devDependencies[dep]
 		if (resolvedDependency === undefined)
 			throw new Error(
-				`Could not resolve dependency "${dep}" in ${packageJsonFile}`!,
+				`Could not resolve dependency "${dep}" in ${packageJsonFile}!`,
 			)
 		reporter.progress(layerName)(`${dep}: ${resolvedDependency}`)
 		return {
