@@ -38,8 +38,8 @@ jobs:
 
       - name: Check source code with eslint
         run:
-          npx eslint --fix --ext .js,.ts,.jsx,.tsx --ignore-pattern
-          commitlint.config.js ./
+          npx eslint --fix --ext .js,.ts,.jsx,.tsx  --ignore-path .gitignore
+          --ignore-pattern commitlint.config.js ./
 
       - name: Commit changes
         run: |
