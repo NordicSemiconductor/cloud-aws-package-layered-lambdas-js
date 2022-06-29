@@ -29,7 +29,7 @@
   "dependencies": {
     "@aws-sdk/client-cloudformation": "3.118.1",
     "@aws-sdk/client-lambda": "3.118.1",
-    "@aws-sdk/client-s3": "3.118.1",
+    "@aws-sdk/client-s3": "3.120.0",
     "ansi-escapes": "4.3.2",
     "aws-lambda": "1.0.7",
     "chalk": "4.1.2",
