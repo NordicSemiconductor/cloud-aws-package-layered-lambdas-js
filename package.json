@@ -41,7 +41,7 @@
     "yazl": "2.5.1"
   },
   "devDependencies": {
-    "@nordicsemiconductor/asset-tracker-cloud-code-style": "11.0.131",
+    "@nordicsemiconductor/asset-tracker-cloud-code-style": "11.0.132",
     "@nordicsemiconductor/cloudformation-helpers": "7.0.6",
     "@types/aws-lambda": "8.10.106",
     "@types/dependency-tree": "8.1.1",
