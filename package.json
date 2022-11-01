@@ -53,8 +53,8 @@
     "@types/uuid": "8.3.4",
     "@types/webpack": "5.28.0",
     "@types/yazl": "2.4.2",
-    "aws-cdk-lib": "2.49.0",
-    "cdk": "2.49.0"
+    "aws-cdk-lib": "2.49.1",
+    "cdk": "2.49.1"
   },
   "files": [
     "package-lock.json",
