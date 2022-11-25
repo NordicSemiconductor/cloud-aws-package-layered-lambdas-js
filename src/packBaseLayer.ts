@@ -45,7 +45,7 @@ export const packBaseLayer = async ({
 		'npm',
 		'ci',
 		'--ignore-scripts',
-		'--only=prod',
+		'--omit=dev',
 		'--no-audit',
 	]
 
