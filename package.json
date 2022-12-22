@@ -31,7 +31,7 @@
     "ansi-escapes": "4.3.2",
     "aws-lambda": "1.0.7",
     "chalk": "4.1.2",
-    "dependency-tree": "8.1.2",
+    "dependency-tree": "9.0.0",
     "glob": "8.0.3",
     "table": "6.8.1",
     "tmp": "0.2.1",
