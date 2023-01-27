@@ -42,7 +42,7 @@
   "devDependencies": {
     "@nordicsemiconductor/asset-tracker-cloud-code-style": "11.0.172",
     "@nordicsemiconductor/cloudformation-helpers": "7.0.7",
-    "@types/aws-lambda": "8.10.109",
+    "@types/aws-lambda": "8.10.110",
     "@types/dependency-tree": "8.1.1",
     "@types/glob": "8.0.1",
     "@types/node": "18.11.18",
