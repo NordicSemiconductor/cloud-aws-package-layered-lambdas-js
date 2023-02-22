@@ -44,7 +44,7 @@
     "@nordicsemiconductor/cloudformation-helpers": "7.0.7",
     "@types/aws-lambda": "8.10.110",
     "@types/dependency-tree": "8.1.1",
-    "@types/glob": "8.0.1",
+    "@types/glob": "8.1.0",
     "@types/node": "18.14.0",
     "@types/table": "6.3.2",
     "@types/terminal-kit": "2.5.1",
