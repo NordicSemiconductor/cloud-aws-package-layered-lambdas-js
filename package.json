@@ -36,7 +36,7 @@
     "table": "6.8.1",
     "tmp": "0.2.1",
     "ts-loader": "9.4.2",
-    "webpack": "5.76.0",
+    "webpack": "5.76.1",
     "yazl": "2.5.1"
   },
   "devDependencies": {
