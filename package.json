@@ -45,7 +45,7 @@
     "@types/aws-lambda": "8.10.111",
     "@types/dependency-tree": "8.1.1",
     "@types/glob": "8.1.0",
-    "@types/node": "18.15.1",
+    "@types/node": "18.15.2",
     "@types/table": "6.3.2",
     "@types/terminal-kit": "2.5.1",
     "@types/tmp": "0.2.3",
